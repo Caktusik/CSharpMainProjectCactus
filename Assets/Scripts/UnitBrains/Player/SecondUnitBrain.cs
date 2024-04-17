@@ -49,14 +49,16 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
+            Vector2Int UnitPositionHodNazad = new Vector2Int();
             if (SelectTargets().Count != 0) { return unit.Pos; }
+            else if (UnitPositionHodNazad == unit.Pos) { return base.GetNextStep();}
             else { return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
-
+            
         }
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         protected override List<Vector2Int> SelectTargets()
         {
             int NumberOffTargetAtack = new int();
@@ -73,12 +75,12 @@ namespace UnitBrains.Player
             //!2c. Производим сортировку целей по дистанции. Для этого вызовем метод сортировки
             SortByDistanceToOwnBase(AllTargets);
 
+            
+            //!2d. Рассчитаем номер текущего юнита и определим, цель под каким номером следует бить.
+            NumberOffTargetAtack = UnitID;
+            while(NumberOffTargetAtack > MaxUnitsInAttack){NumberOffTargetAtack-=MaxUnitsInAttack;}
+            if (NumberOffTargetAtack >= AllTargets.Count) { NumberOffTargetAtack = AllTargets.Count-1; }
             MostDangerTarget = AllTargets[0];
-            ////!2d. Рассчитаем номер текущего юнита и определим, цель под каким номером следует бить.
-            //NumberOffTargetAtack = UnitID;
-            //while(NumberOffTargetAtack > MaxUnitsInAttack){NumberOffTargetAtack-=MaxUnitsInAttack;}
-            //if (NumberOffTargetAtack >= AllTargets.Count) { NumberOffTargetAtack = AllTargets.Count-1; }
-
             result.Clear();
             if (IsTargetInRange(MostDangerTarget)) { result.Add(MostDangerTarget); }
             return result;
