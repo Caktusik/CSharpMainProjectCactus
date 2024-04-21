@@ -25,6 +25,8 @@ namespace UnitBrains.Player
 
         public Vector2Int MostDangerTarget = new Vector2Int();
         public Vector2Int UnitPositionHodNazad = new Vector2Int();
+        static int counter = -1;
+        int UnitID = counter++;
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
 
@@ -57,7 +59,9 @@ namespace UnitBrains.Player
             List<Vector2Int> AllTargets = new List<Vector2Int>();
             foreach(var target in GetAllTargets()) { AllTargets.Add(target); }
             SortByDistanceToOwnBase(AllTargets);
-            if (AllTargets.Count > 0) { result.Add(AllTargets[0]); }
+            while (UnitID > 3) { UnitID -= 3; }
+            while (UnitID > AllTargets.Count-1) { UnitID -= 1; }
+            if (AllTargets.Count > 0) { result.Add(AllTargets[UnitID]); }
             else { result.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]); }
             if (IsTargetInRange(result[0])) { return result; }
             else {MostDangerTarget=result[0] ; result.Clear(); return result; } 
