@@ -22,17 +22,9 @@ namespace UnitBrains.Player
         private float _cooldownTime = 0f;
         private bool _overheated;
 
-        //!1a. Создай статическое поле, равное 0 для выдачи номеров - это счетчик.
-        static int counter = -1;
-        //!1b.Создай поле с номером юнита.
-        int UnitID = counter++;
 
-        //!1c. Создай константу - поле, по которому будет рассматриваться максимум целей для умного выбора. Присвой полю значение 3.
-        int MaxUnitsInAttack = 3;
-        //2b. Записываем самую опасную цель в эту коллекцию. Если цель в зоне досягаемости, то добавляем в result.
-        //2a.Создаем новое поле для хранения целей, к которым нужно идти, но которые вне зоны досягаемости.
-        public List<Vector2Int> NoReachableTargets = new List<Vector2Int>();
         public Vector2Int MostDangerTarget = new Vector2Int();
+        public Vector2Int UnitPositionHodNazad = new Vector2Int();
         protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
         {
 
@@ -49,10 +41,10 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
-            Vector2Int UnitPositionHodNazad = new Vector2Int();
-            if (SelectTargets().Count != 0) { return unit.Pos; }
-            else if (UnitPositionHodNazad == unit.Pos) { return base.GetNextStep();}
-            else { return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
+            
+            if (UnitPositionHodNazad == unit.Pos) { return base.GetNextStep(); }
+            else if (SelectTargets().Count > 0) { return unit.Pos; }
+            else {UnitPositionHodNazad=unit.Pos; return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
             
         }
 
@@ -61,29 +53,14 @@ namespace UnitBrains.Player
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         protected override List<Vector2Int> SelectTargets()
         {
-            int NumberOffTargetAtack = new int();
-            //1. Вместо достижимых целей получи все с помощью метода GetAllTargets().
-            //var AllTargets = GetAllTargets();
-            List<Vector2Int> AllTargets = new List<Vector2Int>();
-            counter = 0;
             List<Vector2Int> result = new List<Vector2Int>();
-            result.Clear();
-            foreach (var target in GetAllTargets())
-            {
-                AllTargets.Add(target);
-            }
-            //!2c. Производим сортировку целей по дистанции. Для этого вызовем метод сортировки
+            List<Vector2Int> AllTargets = new List<Vector2Int>();
+            foreach(var target in GetAllTargets()) { AllTargets.Add(target); }
             SortByDistanceToOwnBase(AllTargets);
-
-            
-            //!2d. Рассчитаем номер текущего юнита и определим, цель под каким номером следует бить.
-            NumberOffTargetAtack = UnitID;
-            while(NumberOffTargetAtack > MaxUnitsInAttack){NumberOffTargetAtack-=MaxUnitsInAttack;}
-            if (NumberOffTargetAtack >= AllTargets.Count) { NumberOffTargetAtack = AllTargets.Count-1; }
-            MostDangerTarget = AllTargets[0];
-            result.Clear();
-            if (IsTargetInRange(MostDangerTarget)) { result.Add(MostDangerTarget); }
-            return result;
+            if (AllTargets.Count > 0) { result.Add(AllTargets[0]); }
+            else { result.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]); }
+            if (IsTargetInRange(result[0])) { return result; }
+            else {MostDangerTarget=result[0] ; result.Clear(); return result; } 
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,7 +68,6 @@ namespace UnitBrains.Player
 
         public override void Update(float deltaTime, float time)
         {
-            Debug.Log($"Мой айди-{UnitID}");
             if (_overheated)
             {
                 _cooldownTime += Time.deltaTime;
