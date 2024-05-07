@@ -66,11 +66,11 @@ namespace UnitBrains.Player
             while (Target > 2) { Target -= 3; }
             while (Target > AllTargets.Count-1) { Target -= 1; }
 
-            if (AllTargets.Count > 0) { Debug.Log($"хочу атакую цель " + Target); result.Add(AllTargets[Target]); }
+            if (AllTargets.Count > 0) {  result.Add(AllTargets[Target]); }
             else { result.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]); }
 
-            if (IsTargetInRange(result[0])) { Debug.Log($"атакую цель "+ Target); return result;  }
-            else { Debug.Log($"хочу ИДТИ цель " + Target); MostDangerTarget =result[0] ; result.Clear(); return result; }
+            if (IsTargetInRange(result[0])) { return result;  }
+            else {  MostDangerTarget =result[0] ; result.Clear(); return result; }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
