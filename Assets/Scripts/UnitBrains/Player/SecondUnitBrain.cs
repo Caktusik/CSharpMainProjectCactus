@@ -57,14 +57,20 @@ namespace UnitBrains.Player
         {
             List<Vector2Int> result = new List<Vector2Int>();
             List<Vector2Int> AllTargets = new List<Vector2Int>();
+            int Target = UnitID;
             foreach(var target in GetAllTargets()) { AllTargets.Add(target); }
+
+            AllTargets.Remove((runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]));
             SortByDistanceToOwnBase(AllTargets);
-            while (UnitID > 3) { UnitID -= 3; }
-            while (UnitID > AllTargets.Count-1) { UnitID -= 1; }
-            if (AllTargets.Count > 0) { result.Add(AllTargets[UnitID]); }
+
+            while (Target > 2) { Target -= 3; }
+            while (Target > AllTargets.Count-1) { Target -= 1; }
+
+            if (AllTargets.Count > 0) { Debug.Log($"хочу атакую цель " + Target); result.Add(AllTargets[Target]); }
             else { result.Add(runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]); }
-            if (IsTargetInRange(result[0])) { return result; }
-            else {MostDangerTarget=result[0] ; result.Clear(); return result; } 
+
+            if (IsTargetInRange(result[0])) { Debug.Log($"атакую цель "+ Target); return result;  }
+            else { Debug.Log($"хочу ИДТИ цель " + Target); MostDangerTarget =result[0] ; result.Clear(); return result; }
         }
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
