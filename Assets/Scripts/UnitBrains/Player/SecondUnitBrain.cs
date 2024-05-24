@@ -23,7 +23,7 @@ namespace UnitBrains.Player
         private bool _overheated;
 
 
-        public Vector2Int MostDangerTarget = new Vector2Int();
+        private Vector2Int MostDangerTarget = new Vector2Int();
         public Vector2Int UnitPositionHodNazad = new Vector2Int();
         static int counter = -1;
         int UnitID = counter++;
@@ -43,10 +43,8 @@ namespace UnitBrains.Player
 
         public override Vector2Int GetNextStep()
         {
-            
-            if (UnitPositionHodNazad == unit.Pos) { return base.GetNextStep(); }
-            else if (SelectTargets().Count > 0) { return unit.Pos; }
-            else {UnitPositionHodNazad=unit.Pos; return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
+            if (SelectTargets().Count > 0) { return unit.Pos; }
+            else { return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
             
         }
 
@@ -58,8 +56,8 @@ namespace UnitBrains.Player
             List<Vector2Int> result = new List<Vector2Int>();
             List<Vector2Int> AllTargets = new List<Vector2Int>();
             int Target = UnitID;
-            foreach(var target in GetAllTargets()) { AllTargets.Add(target); }
 
+            foreach(var target in GetAllTargets()) { AllTargets.Add(target); }
             AllTargets.Remove((runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId]));
             SortByDistanceToOwnBase(AllTargets);
 
