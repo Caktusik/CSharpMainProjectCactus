@@ -24,8 +24,7 @@ public class ThirdUnitBrain : DefaultPlayerUnitBrain
     public Vector2Int MostDangerTarget = new Vector2Int();
     float TimerMaxCount = 0.3f;
     float Timer = 0.3f;
-    enum mod{stop,go,shut}
-    
+    enum mod{stop,go,shut}   
     mod Mod = mod.go;
     protected override void GenerateProjectiles(Vector2Int forTarget, List<BaseProjectile> intoList)
     {   
@@ -73,9 +72,9 @@ public class ThirdUnitBrain : DefaultPlayerUnitBrain
 
 
 
-        if (Mod!=mod.go) { return unit.Pos; }
-        else if (SelectTargets().Count > 0) { return unit.Pos; }
-        else { return unit.Pos.CalcNextStepTowards(MostDangerTarget); }
+        if (Mod!=mod.go) { return base.GetNextStep(); }
+        else if (SelectTargets().Count > 0) { return base.GetNextStep(); }
+        else { return base.GetNextStep(); }
     }
 
     protected override List<Vector2Int> SelectTargets()
