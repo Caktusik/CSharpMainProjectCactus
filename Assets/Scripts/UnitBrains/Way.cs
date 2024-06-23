@@ -70,8 +70,8 @@ namespace Assets.Scripts.UnitBrains
             return false;
         }
         public Cletka ooo()
-            
         {
+            Dell dell = new Dell();
             AlredyChecked.Add(new Cletka(startPos, "0" ));
             
             for (int i = 0; i < 100; i++)
@@ -88,6 +88,7 @@ namespace Assets.Scripts.UnitBrains
                         AlredyChecked.AddRange<Cletka>(ChekingNeigbors(AlredyChecked[j]));                     
                     }
                 }
+                AlredyChecked=(dell.delliter(AlredyChecked));
             }
             return null;
         }
