@@ -1,19 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using Model;
 using Model.Runtime.Projectiles;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using Utilities;
 using UnitBrains.Player;
-using static UnityEngine.GraphicsBuffer;
+
 public class ThirdUnitBrain : DefaultPlayerUnitBrain
 {
     public override string TargetUnitName => "Ironclad Behemoth";

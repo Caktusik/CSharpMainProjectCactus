@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{5F5DFEF9-5046-C8F9-E747-5D22F7CE70CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Root", "Root.csproj", "{4140878D-B318-C929-D16F-B1A50AF513CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{0DA92394-6257-925E-C340-66260E46FB71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{5F5DFEF9-5046-C8F9-E747-5D22F7CE70CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5DFEF9-5046-C8F9-E747-5D22F7CE70CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F5DFEF9-5046-C8F9-E747-5D22F7CE70CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4140878D-B318-C929-D16F-B1A50AF513CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4140878D-B318-C929-D16F-B1A50AF513CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4140878D-B318-C929-D16F-B1A50AF513CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4140878D-B318-C929-D16F-B1A50AF513CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA92394-6257-925E-C340-66260E46FB71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA92394-6257-925E-C340-66260E46FB71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA92394-6257-925E-C340-66260E46FB71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA92394-6257-925E-C340-66260E46FB71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
