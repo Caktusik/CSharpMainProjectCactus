@@ -6,9 +6,7 @@ using Model;
 using Model.Config;
 using UnityEngine;
 using Utilities;
-//hello
-//How are you?
-//i'm fine
+
 namespace Controller
 {
     public class BotController
@@ -18,11 +16,11 @@ namespace Controller
         private readonly List<UnitConfig> _sortedUnits;
         private readonly Action<UnitConfig> _onBotUnitChosen;
         private Coroutine _updateCoroutine;
-        
+
         public BotController(Action<UnitConfig> onBotUnitChosen)
         {
             _onBotUnitChosen = onBotUnitChosen;
-            
+
             _timeUtil = ServiceLocator.Get<TimeUtil>();
             _runtimeModel = ServiceLocator.Get<IReadOnlyRuntimeModel>();
             _sortedUnits = ServiceLocator.Get<Settings>().EnemyUnits.Keys
