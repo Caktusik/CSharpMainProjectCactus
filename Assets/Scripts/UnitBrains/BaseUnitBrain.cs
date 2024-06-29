@@ -38,7 +38,44 @@ namespace UnitBrains
 
             var target = runtimeModel.RoMap.Bases[
                 IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+            if (!IsPlayerUnitBrain)
+            {
+                var diff = target - unit.Pos;
+                var stepDiff = diff.SignOrZero();
+                var nextStep = unit.Pos + stepDiff;
 
+                if (runtimeModel.IsTileWalkable(nextStep))
+                    return nextStep;
+
+                if (stepDiff.sqrMagnitude > 1)
+                {
+                    var partStep0 = unit.Pos + new Vector2Int(stepDiff.x, 0);
+                    if (runtimeModel.IsTileWalkable(partStep0))
+                        return partStep0;
+
+                    var partStep1 = unit.Pos + new Vector2Int(0, stepDiff.y);
+                    if (runtimeModel.IsTileWalkable(partStep1))
+                        return partStep1;
+                }
+
+                var sideStep0 = unit.Pos + new Vector2Int(stepDiff.y, -stepDiff.x);
+                var shiftedStep0 = unit.Pos + (sideStep0 + stepDiff).SignOrZero();
+                if (runtimeModel.IsTileWalkable(shiftedStep0))
+                    return shiftedStep0;
+
+                var sideStep1 = unit.Pos + new Vector2Int(-stepDiff.y, stepDiff.x);
+                var shiftedStep1 = unit.Pos + (sideStep1 + stepDiff).SignOrZero();
+                if (runtimeModel.IsTileWalkable(shiftedStep1))
+                    return shiftedStep1;
+
+                if (runtimeModel.IsTileWalkable(sideStep0))
+                    return sideStep0;
+
+                if (runtimeModel.IsTileWalkable(sideStep1))
+                    return sideStep1;
+
+                return unit.Pos;
+            }
             _activePath = new AStarUnitPath(runtimeModel, unit.Pos, target);
             return _activePath.GetNextStepFrom(unit.Pos);
         }
