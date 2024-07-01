@@ -32,36 +32,15 @@ namespace UnitBrains.Player
             Vector2Int recommendedPoint = unitsCoordinator.recommendedPoint;
 
             AStarUnitPath path = new AStarUnitPath(runtimeModel, unit.Pos, recommendedPoint);
-            if (IsTargetInVisionRange(recommendedTarget))
+            if (HasTargetsInRange())
             {
                 if (IsTargetInRange(recommendedTarget))
                 {
                     return unit.Pos;
                 }
-                path = new AStarUnitPath(runtimeModel, unit.Pos, recommendedTarget);
+                return path.GetNextStepFrom(unit.Pos);
             }
-            return path.GetNextStepFrom(unit.Pos);
-        }
-
-        protected override List<Vector2Int> SelectTargets()
-        {
-            var result = new List<Vector2Int>();
-
-            var targets = GetReachableTargets();
-            var recommendedTarget = unitsCoordinator.recommendedTarget;
-
-            if (targets.Contains(recommendedTarget))
-                result.Add(recommendedTarget);
-
-            return result;
-
-        }
-
-        private bool IsTargetInVisionRange(Vector2Int targetPos)
-        {
-            float visionRangeSqr = unit.Config.AttackRange * unit.Config.AttackRange * 2;
-            var diff = targetPos - unit.Pos;
-            return diff.sqrMagnitude <= visionRangeSqr;
+            return base.GetNextStep();
         }
     }
 }
