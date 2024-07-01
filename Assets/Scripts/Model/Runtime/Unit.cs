@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.UnitBrains.Player;
+
+
+
 using Model.Config;
 using Model.Runtime.Projectiles;
 using Model.Runtime.ReadOnly;
@@ -23,40 +27,63 @@ namespace Model.Runtime
         private IReadOnlyRuntimeModel _runtimeModel;
         private BaseUnitBrain _brain;
 
+        private StatusEffectsSystem _statusEffectsSystem;
+
         private float _nextBrainUpdateTime = 0f;
         private float _nextMoveTime = 0f;
         private float _nextAttackTime = 0f;
-        
-        public Unit(UnitConfig config, Vector2Int startPos)
+
+        public Unit(UnitConfig config, Vector2Int startPos, UnitsCoordinator unitsCoordinator)
         {
             Config = config;
             Pos = startPos;
             Health = config.MaxHealth;
             _brain = UnitBrainProvider.GetBrain(config);
             _brain.SetUnit(this);
+            _brain.SetCoordinator(unitsCoordinator);
             _runtimeModel = ServiceLocator.Get<IReadOnlyRuntimeModel>();
+
+            _statusEffectsSystem = ServiceLocator.Get<StatusEffectsSystem>();
+
         }
 
         public void Update(float deltaTime, float time)
         {
             if (IsDead)
                 return;
-            
+
             if (_nextBrainUpdateTime < time)
             {
                 _nextBrainUpdateTime = time + Config.BrainUpdateInterval;
                 _brain.Update(deltaTime, time);
             }
-            
+
             if (_nextMoveTime < time)
             {
-                _nextMoveTime = time + Config.MoveDelay;
+                float moveModifier = 1f;
+
+                if (Random.Range(1, 100) <= 10)
+                {
+                    ServiceLocator.Get<StatusEffectsSystem>().AddStatusEffect(this, new SpeedBuff(this));
+                    moveModifier = _statusEffectsSystem.GetMovementSpeedModifier(this);
+                }
+                _nextMoveTime = time + Config.MoveDelay * moveModifier;
+                Debug.Log("Move modifier: " + moveModifier);
+                //Debug.Log("Next move time: " + _nextMoveTime);
                 Move();
             }
-            
+
             if (_nextAttackTime < time && Attack())
             {
-                _nextAttackTime = time + Config.AttackDelay;
+                float attackModifier = 1f;
+                if (Random.Range(1, 100) <= 10)
+                {
+                    ServiceLocator.Get<StatusEffectsSystem>().AddStatusEffect(this, new AttackSpeedBuff(this));
+                    attackModifier = _statusEffectsSystem.GetAttackSpeedModifier(this);
+                }
+                _nextAttackTime = time + Config.AttackDelay * attackModifier;
+                Debug.Log("AttackModifier: " + attackModifier);
+                //Debug.Log("Next attack time: " + _nextAttackTime);
             }
         }
 
@@ -65,7 +92,7 @@ namespace Model.Runtime
             var projectiles = _brain.GetProjectiles();
             if (projectiles == null || projectiles.Count == 0)
                 return false;
-            
+
             _pendingProjectiles.AddRange(projectiles);
             return true;
         }
@@ -85,7 +112,7 @@ namespace Model.Runtime
             {
                 return;
             }
-            
+
             Pos = targetPos;
         }
 
@@ -97,6 +124,11 @@ namespace Model.Runtime
         public void TakeDamage(int projectileDamage)
         {
             Health -= projectileDamage;
+            if (Random.Range(1, 100) <= 5)
+            {
+                ServiceLocator.Get<StatusEffectsSystem>().AddStatusEffect(this, new SlowDebuff(this));
+                ServiceLocator.Get<StatusEffectsSystem>().AddStatusEffect(this, new AttackSpeedDebuff(this));
+            }
         }
     }
 }
