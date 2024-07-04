@@ -7,6 +7,7 @@ namespace Model.Config
     {
         [SerializeField] private bool _isPlayerUnit;
         [SerializeField] private string _name;
+        [SerializeField] private string _type;
         [SerializeField] private Sprite _icon;
         [SerializeField] private int _cost;
         [SerializeField] private int _maxHealth;
@@ -16,9 +17,10 @@ namespace Model.Config
         [SerializeField] private float _attackRange = 3.5f;
         [SerializeField] private ProjectileType _projectileType = ProjectileType.ArchToTile;
         [SerializeField] private int _damage = 15;
-        
+
         public bool IsPlayerUnit => _isPlayerUnit;
         public string Name => _name;
+        public string Type => _type;
         public Sprite Icon => _icon;
         public int Cost => _cost;
         public int MaxHealth => _maxHealth;
